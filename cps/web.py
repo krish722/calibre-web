@@ -83,12 +83,14 @@ except ImportError:
 
 @app.after_request
 def add_security_headers(resp):
-    csp = "default-src 'self'"
-    csp += ''.join([' ' + host for host in config.config_trustedhosts.strip().split(',')])
-    csp += " 'unsafe-inline' 'unsafe-eval'; font-src 'self' data:; img-src 'self' "
+    # csp = "default-src 'self'  "
+    # csp += ''.join([' ' + host for host in config.config_trustedhosts.strip().split(',')])
+    # csp += " 'unsafe-inline' 'unsafe-eval'; font-src 'self' data:; img-src 'self' "
+    csp = ""
     if request.path.startswith("/author/") and config.config_use_goodreads:
-        csp += "images.gr-assets.com i.gr-assets.com s.gr-assets.com"
-    csp += " data:"
+        csp += "images.gr-assets.com i.gr-assets.com s.gr-assets.com "
+    # csp += "data:"
+    # print(csp)
     resp.headers['Content-Security-Policy'] = csp
     if request.endpoint == "edit-book.show_edit_book" or config.config_use_google_drive:
         resp.headers['Content-Security-Policy'] += " *"
